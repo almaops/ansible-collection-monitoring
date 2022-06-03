@@ -1,0 +1,22 @@
+---
+namespace: almaops
+name: CHANGEME
+version: 0.0.0
+readme: README.md
+authors:
+  - Person <email@example.com>
+description: 'Change me'
+license:
+  - MIT
+tags:
+  - change
+  - me
+dependencies:
+  namespace.collection: '>=1.0.0'
+repository: 'https://github.com/almaops/changeme'
+homepage: 'https://almaops.com'
+issues: 'https://github.com/almaops/changeme'
+build_ignore:
+  - .gitignore
+  - .yamllint
+...
