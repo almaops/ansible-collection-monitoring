@@ -1,0 +1,56 @@
+---
+- name: "{{ ct_grafana_task_prefix }} Create grafana group"
+  group:
+    name: "{{ ct_grafana_user_group }}"
+    state: present
+    gid: "{{ ct_grafana_user_gid }}"
+
+- name: "{{ ct_grafana_task_prefix }} Create grafana user"
+  user:
+    name: "{{ ct_grafana_user_name }}"
+    system: true
+    shell: /bin/false
+    group: "{{ ct_grafana_user_group }}"
+    uid: "{{ ct_grafana_user_uid }}"
+
+- name: "{{ ct_grafana_task_prefix }} Create base directories"
+  file:
+    state: directory
+    path: "{{ item }}"
+    owner: root
+    group: root
+    mode: '0755'
+  loop:
+    - "{{ ct_grafana_path_config_base }}"
+    - "{{ ct_grafana_path_data_base }}"
+
+- name: "{{ ct_grafana_task_prefix }} Create env file"
+  template:
+    src: "{{ ct_grafana_template_env }}"
+    dest: "{{ ct_grafana_path_config_env }}"
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: "{{ ct_grafana_task_prefix }} Create data directory"
+  file:
+    state: directory
+    path: "{{ ct_grafana_path_data }}"
+    owner: "{{ ct_grafana_user_name }}"
+    group: "{{ ct_grafana_user_group }}"
+    mode: '0755'
+
+- name: "{{ ct_grafana_task_prefix }} Create container"
+  docker_container:
+    name: "{{ ct_grafana_ct_name }}"
+    image: "{{ ct_grafana_ct_image }}"
+    state: "{{ ct_grafana_ct_state }}"
+    restart_policy: "{{ ct_grafana_ct_restart_policy }}"
+    restart: "{{ ct_grafana_ct_restart }}"
+    pull: "{{ ct_grafana_ct_pull }}"
+    ports: "{{ ct_grafana_enable_ports | ternary(ct_grafana_ct_ports, omit) }}"
+    volumes: "{{ ct_grafana_enable_data_persistence | ternary(ct_grafana_ct_volumes, omit) }}"
+    user: "{{ ct_grafana_ct_user }}"
+    recreate: "{{ ct_grafana_ct_recreate }}"
+    env_file: "{{ ct_grafana_path_config_env }}"
+...

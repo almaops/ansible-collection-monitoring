@@ -1,0 +1,66 @@
+---
+ct_grafana_task_prefix: "=== GRAFANA CT ==="
+
+# Common settings
+ct_grafana_enable_ports: true
+ct_grafana_enable_data_persistence: true
+ct_grafana_domain: "grafana.example.com"
+
+# User settings
+ct_grafana_user_name: grafana
+ct_grafana_user_group: grafana
+ct_grafana_user_uid: "472"
+ct_grafana_user_gid: "472"
+
+# Templates
+ct_grafana_template_env: "grafana.env.j2"
+
+# File names
+ct_grafana_file_env: "{{ ct_grafana_ct_name }}.env"
+
+# Path settings
+ct_grafana_path_config_base: "/etc/ct_grafana"
+ct_grafana_path_config_env: "{{ ct_grafana_path_config_base }}/{{ ct_grafana_file_env }}"
+ct_grafana_path_data_base: "/srv/ct_grafana"
+ct_grafana_path_data_volume: "{{ ct_grafana_path_data_base }}/{{ ct_grafana_ct_name }}"
+ct_grafana_path_ct_data: "/var/lib/grafana"
+
+# Network settings
+ct_grafana_bind_addr: "127.0.0.1"
+ct_grafana_bind_port: "3000"
+ct_grafana_bind_ct_port: "3000"
+
+# Container settings
+ct_grafana_ct_name: "grafana"
+ct_grafana_ct_version: "latest"
+ct_grafana_ct_image: "grafana/grafana:{{ ct_grafana_ct_version }}"
+ct_grafana_ct_state: "started"
+ct_grafana_ct_restart_policy: "always"
+ct_grafana_ct_restart: "no"
+ct_grafana_ct_pull: "no"
+ct_grafana_ct_recreate: "no"
+ct_grafana_ct_user: "{{ ct_grafana_user_uid }}:{{ ct_grafana_user_gid }}"
+ct_grafana_ct_ports_default:
+  - "{{ ct_grafana_bind_addr }}:{{ ct_grafana_bind_port }}:{{ ct_grafana_bind_ct_port }}"
+ct_grafana_ct_ports_extra: []
+ct_grafana_ct_ports: "{{ ct_grafana_ct_ports_default + ct_grafana_ct_ports_extra }}"
+ct_grafana_ct_volume_data:
+  - "{{ ct_grafana_path_data }}:{{ ct_grafana_path_ct_data }}"
+ct_grafana_ct_volumes_extra: []
+ct_grafana_ct_volumes: "{{ ct_grafana_ct_volume_data + ct_grafana_ct_volumes_extra }}"
+
+# Environment variables
+# ct_grafana_env_admin_user: "{{ undef }}"
+# ct_grafana_env_admin_password: "{{ undef }}"
+ct_grafana_env_gf_server_domain: "{{ ct_grafana_domain }}"
+ct_grafana_env_gf_server_root_url: "https://{{ ct_grafana_domain }}/"
+ct_grafana_env_gf_server_enforce_domain: "true"
+ct_grafana_env_gf_server_enable_gzip: "true"
+ct_grafana_env_gf_analytics_reporting_enabled: "false"
+ct_grafana_env_gf_smtp_enabled: false
+ct_grafana_env_gf_smtp_host: "smtp.example.com"
+ct_grafana_env_gf_smtp_from_address: "grafana@example.com"
+ct_grafana_env_gf_smtp_user: "grafana@example.com"
+ct_grafana_env_gf_smtp_password: "changeme"
+ct_grafana_env_extra: {}
+...

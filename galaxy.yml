@@ -1,21 +1,21 @@
 ---
 namespace: almaops
-name: CHANGEME
-version: 0.0.0
+name: monitoring
+version: 1.0.0
 readme: README.md
 authors:
-  - Person <email@example.com>
-description: 'Change me'
+  - Valentin Gostev <val@le.lc>
+description: 'This Ansible collection provides roles for deploying your monitoring stack'
 license:
   - MIT
 tags:
-  - change
-  - me
+  - monitoring
+  - grafana
 dependencies:
-  namespace.collection: '>=1.0.0'
-repository: 'https://github.com/almaops/changeme'
+  community.grafana: '>=1.4.0'
+repository: 'https://github.com/almaops/ansible-collection-monitoring'
 homepage: 'https://almaops.com'
-issues: 'https://github.com/almaops/changeme'
+issues: 'https://github.com/almaops/ansible-collection-monitoring/issues'
 build_ignore:
   - .gitignore
   - .yamllint
