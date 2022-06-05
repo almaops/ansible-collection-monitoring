@@ -36,29 +36,29 @@ ct_grafana_ct_version: "latest"
 ct_grafana_ct_image: "grafana/grafana:{{ ct_grafana_ct_version }}"
 ct_grafana_ct_state: "started"
 ct_grafana_ct_restart_policy: "always"
-ct_grafana_ct_restart: "no"
-ct_grafana_ct_pull: "no"
-ct_grafana_ct_recreate: "no"
+ct_grafana_ct_restart: false
+ct_grafana_ct_pull: false
+ct_grafana_ct_recreate: false
 ct_grafana_ct_user: "{{ ct_grafana_user_uid }}:{{ ct_grafana_user_gid }}"
 ct_grafana_ct_ports_default:
   - "{{ ct_grafana_bind_addr }}:{{ ct_grafana_bind_port }}:{{ ct_grafana_bind_ct_port }}"
 ct_grafana_ct_ports_extra: []
 ct_grafana_ct_ports: "{{ ct_grafana_ct_ports_default + ct_grafana_ct_ports_extra }}"
 ct_grafana_ct_volume_data:
-  - "{{ ct_grafana_path_data }}:{{ ct_grafana_path_ct_data }}"
+  - "{{ ct_grafana_path_data_volume }}:{{ ct_grafana_path_ct_data }}"
 ct_grafana_ct_volumes_extra: []
 ct_grafana_ct_volumes: "{{ ct_grafana_ct_volume_data + ct_grafana_ct_volumes_extra }}"
 
 # Environment variables
-# ct_grafana_env_gf_security_admin_user: "{{ undef }}"
-# ct_grafana_env_gf_security_admin_password: "{{ undef }}"
+ct_grafana_env_gf_security_admin_user: "{{ undef(hint='You must define default admin username') }}"
+ct_grafana_env_gf_security_admin_password: "{{ undef(hint='You must define default admin password') }}"
 ct_grafana_env_gf_server_domain: "{{ ct_grafana_domain }}"
 ct_grafana_env_gf_server_root_url: "https://{{ ct_grafana_domain }}/"
-ct_grafana_env_gf_server_enforce_domain: "true"
-ct_grafana_env_gf_server_enable_gzip: "true"
-ct_grafana_env_gf_analytics_reporting_enabled: "false"
-ct_grafana_env_gf_analytics_enable_feedback_links: "false"
-ct_grafana_env_gf_security_disable_gravatar: "true"
+ct_grafana_env_gf_server_enforce_domain: true
+ct_grafana_env_gf_server_enable_gzip: true
+ct_grafana_env_gf_analytics_reporting_enabled: false
+ct_grafana_env_gf_analytics_enable_feedback_links: false
+ct_grafana_env_gf_security_disable_gravatar: true
 ct_grafana_env_gf_smtp_enabled: false
 ct_grafana_env_gf_smtp_host: "smtp.example.com"
 ct_grafana_env_gf_smtp_from_address: "grafana@example.com"

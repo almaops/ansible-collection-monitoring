@@ -1,5 +1,5 @@
+[![License](https://img.shields.io/badge/license-MIT%20License-brightgreen.svg)](./LICENSE)
 # almaops.monitoring.ct_grafana
-[![License](https://img.shields.io/badge/license-MIT%20License-brightgreen.svg)](https://opensource.org/licenses/MIT)
 
 # Requirements
 On target hosts:
@@ -11,13 +11,20 @@ Please refer to [defaults/main.yml](./defaults/main.yml) for full list of availa
 
 # Example playbook
 ```
+# Using collections keyword
 - hosts:
     - servers
   become: true
   collections:
     - almaops.monitoring
   roles:
-    - role: ct_grafana   
+    - role: ct_grafana
+# Using only roles keyword
+- hosts:
+    - servers
+  become: true
+  roles:
+    - almaops.monitoring.ct_grafana
 ```
 
 # Contributors

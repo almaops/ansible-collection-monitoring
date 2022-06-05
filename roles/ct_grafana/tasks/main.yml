@@ -35,7 +35,7 @@
 - name: "{{ ct_grafana_task_prefix }} Create data directory"
   file:
     state: directory
-    path: "{{ ct_grafana_path_data }}"
+    path: "{{ ct_grafana_path_data_volume }}"
     owner: "{{ ct_grafana_user_name }}"
     group: "{{ ct_grafana_user_group }}"
     mode: '0755'
