@@ -27,3 +27,6 @@ collections:
 
 ### almaops.monitoring.ct_grafana
 This roles deploys container with Grafana. Please consult with role's [README](./roles/ct_grafana/README.md)
+
+### almaops.monitoring.ct_loki
+This roles deploys container with Grafana Loki. Please consult with role's [README](./roles/ct_loki/README.md)

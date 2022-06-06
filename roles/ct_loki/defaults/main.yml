@@ -1,0 +1,55 @@
+---
+ct_loki_task_prefix: "=== GRAFANA LOKI CT ==="
+
+# Common settings
+ct_loki_enable_ports: true
+ct_loki_enable_data_persistence: true
+ct_loki_enable_custom_config: false
+
+# Templates
+ct_loki_template_config: "loki-minio.yaml.j2"
+
+# Files
+ct_loki_file_config: "{{ ct_loki_ct_name }}.yaml"
+
+# Network settings
+ct_loki_bind_addr: "127.0.0.1"
+ct_loki_bind_addr_http: "{{ ct_loki_bind_addr }}"
+ct_loki_bind_port_http: "3100"
+ct_loki_bind_ct_port_http: "3100"
+
+# Path settings
+ct_loki_path_config_base: "/etc/ct_loki"
+ct_loki_path_config_file: "{{ ct_loki_path_config_base }}/{{ ct_loki_file_config }}"
+ct_loki_path_data_base: "/srv/ct_loki"
+ct_loki_path_data_volume: "{{ ct_loki_path_data_base }}/{{ ct_loki_ct_name }}"
+ct_loki_path_ct_config: "/etc/loki/local-config.yaml"
+ct_loki_path_ct_data: "/loki"
+
+# Container settings
+ct_loki_ct_name: "grafana-loki"
+ct_loki_ct_version: "latest"
+ct_loki_ct_image: "grafana/loki:{{ ct_loki_ct_version }}"
+ct_loki_ct_restart_policy: "always"
+ct_loki_ct_state: "started"
+ct_loki_ct_restart: false
+ct_loki_ct_pull: false
+ct_loki_ct_recreate: false
+ct_loki_ct_ports_http:
+  - "{{ ct_loki_bind_addr_http }}:{{ ct_loki_bind_port_http }}:{{ ct_loki_bind_ct_port_http }}"
+ct_loki_ct_ports_extra: []
+ct_loki_ct_ports: "{{ ct_loki_ct_ports_http + ct_loki_ct_ports_extra }}"
+ct_loki_ct_volume_config:
+  - "{{ ct_loki_path_config_file }}:{{ct_loki_path_ct_config }}:ro"
+ct_loki_ct_volumes_data:
+  - "{{ ct_loki_path_data_volume }}:{{ ct_loki_path_ct_data }}"
+ct_loki_ct_volumes_extra: []
+ct_loki_ct_volumes: "{{ ct_loki_ct_volumes_data + ct_loki_ct_volumes_extra }}"
+ct_loki_ct_command: []
+
+# Configuration parameters
+ct_loki_conf_s3_endpoint: "127.0.0.1:9000"
+ct_loki_conf_s3_bucket: "loki"
+ct_loki_conf_s3_access_key: "changeme"
+ct_loki_conf_s3_secret_key: "changeme"
+...
