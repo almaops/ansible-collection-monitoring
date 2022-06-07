@@ -1,0 +1,6 @@
+# Generate by ct_grafana role from https://galaxy.ansible.com/almaops/monitoring
+---
+apiVersion: 1
+providers:
+{{ ct_grafana_provisioning_dashboards | to_nice_yaml }}
+...

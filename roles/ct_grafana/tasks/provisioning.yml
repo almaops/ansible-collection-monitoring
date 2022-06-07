@@ -1,0 +1,103 @@
+---
+- name: "{{ ct_grafana_task_prefix }} Provisioning"
+  ansible.builtin.file:
+    state: directory
+    path: "{{ item }}"
+    owner: "{{ ct_grafana_user_name }}"
+    group: root
+    mode: '0755'
+  loop:
+    - "{{ ct_grafana_path_provisioning }}"
+    - "{{ ct_grafana_path_provisioning }}/datasources"
+    - "{{ ct_grafana_path_provisioning }}/dashboards"
+    - "{{ ct_grafana_path_provisioning }}/notifiers"
+    - "{{ ct_grafana_path_provisioning }}/plugins"
+    - "{{ ct_grafana_path_dashboards }}"
+
+- name: "{{ ct_grafana_task_prefix }} Provision data sources"
+  ansible.builtin.template:
+    src: "{{ ct_grafana_template_provisioning_datasources }}"
+    dest: "{{ ct_grafana_path_provisioning }}/datasources/ansible.yml"
+    owner: "{{ ct_grafana_user_name }}"
+    group: root
+    mode: '0640'
+  when: ( ct_grafana_provisioning_datasources != [] ) or
+        ( ct_grafana_provisioning_delete_datasources != [] )
+
+# Remove data source definition file if both lists are empty
+- name: "{{ ct_grafana_task_prefix }} Omit data sources"
+  ansible.builtin.file:
+    path: "{{ ct_grafana_path_provisioning }}/datasources/ansible.yml"
+    state: absent
+  when:
+    - ct_grafana_provisioning_datasources == []
+    - ct_grafana_provisioning_delete_datasources == []
+
+- name: "{{ ct_grafana_task_prefix }} Provision notifiers"
+  ansible.builtin.template:
+    src: "{{ ct_grafana_template_provisioning_notifiers }}"
+    dest: "{{ ct_grafana_path_provisioning }}/notifiers/ansible.yml"
+    owner: "{{ ct_grafana_user_name }}"
+    group: root
+    mode: '0640'
+  when: ( ct_grafana_provisioning_notifiers != [] ) or
+        ( ct_grafana_provisioning_delete_notifiers != [] )
+
+# Remove notifiers definition file if both lists are empty
+- name: "{{ ct_grafana_task_prefix }} Omit notifiers"
+  ansible.builtin.file:
+    path: "{{ ct_grafana_path_provisioning }}/notifiers/ansible.yml"
+    state: absent
+  when:
+    - ct_grafana_provisioning_notifiers == []
+    - ct_grafana_provisioning_delete_notifiers == []
+
+- name: "{{ ct_grafana_task_prefix }} Provision plugins"
+  ansible.builtin.template:
+    src: "{{ ct_grafana_template_provisioning_plugins }}"
+    dest: "{{ ct_grafana_path_provisioning }}/plugins/ansible.yml"
+    owner: "{{ ct_grafana_user_name }}"
+    group: root
+    mode: '0640'
+  when: ct_grafana_provisioning_plugins != []
+
+# Remove plugins definition file if list is empty
+- name: "{{ ct_grafana_task_prefix }} Omit plugins"
+  ansible.builtin.file:
+    path: "{{ ct_grafana_path_provisioning }}/plugins/ansible.yml"
+    state: absent
+  when:
+    - ct_grafana_provisioning_plugins == []
+
+# In order to provision dashboards you will need to fine variable
+# {{ ct_grafana_path_dashboards_source }}, which points to directory
+# with dashboard json's on Controller
+- name: "{{ ct_grafana_task_prefix }} Copy dashboards"
+  ansible.builtin.copy:
+    src: "{{ ct_grafana_path_dashboards_source }}"
+    dest: "{{ ct_grafana_path_dashboards }}/"
+  when: ct_grafana_path_dashboards_source is defined
+
+- name: "{{ ct_grafana_task_prefix }} Provision dashboards"
+  ansible.builtin.template:
+    src: "{{ ct_grafana_template_provisioning_dashboards }}"
+    dest: "{{ ct_grafana_path_provisioning }}/dashboards/ansible.yml"
+    owner: "{{ ct_grafana_user_name }}"
+    group: root
+    mode: '0640'
+  when: ct_grafana_provisioning_dashboards != []
+
+# Remove dashboards definition file if list is empty
+- name: "{{ ct_grafana_task_prefix }} Omit plugins"
+  ansible.builtin.file:
+    path: "{{ ct_grafana_path_provisioning }}/dashboards/ansible.yml"
+    state: absent
+  when:
+    - ct_grafana_provisioning_dashboards == []
+
+# Add provisioning directory to list of mounts of container
+- name: "{{ ct_grafana_task_prefix }} Mount provisioning directory"
+  ansible.builtin.set_fact:
+    _ct_grafana_ct_volumes_provisioning:
+      - "{{ ct_grafana_path_provisioning }}:{{ ct_grafana_path_ct_provisioning }}"
+...

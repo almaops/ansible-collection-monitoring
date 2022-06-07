@@ -1,0 +1,7 @@
+# Generate by ct_grafana role from https://galaxy.ansible.com/almaops/monitoring
+---
+delete_notifiers:
+{{ ct_grafana_provisioning_delete_notifiers | to_nice_yaml }}
+notifiers:
+{{ ct_grafana_provisioning_notifiers | to_nice_yaml }}
+...

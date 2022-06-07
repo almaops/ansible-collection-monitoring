@@ -4,6 +4,7 @@ ct_grafana_task_prefix: "=== GRAFANA CT ==="
 # Common settings
 ct_grafana_enable_ports: true
 ct_grafana_enable_data_persistence: true
+ct_grafana_enable_provisioning: false
 ct_grafana_domain: "grafana.example.com"
 
 # User settings
@@ -14,6 +15,10 @@ ct_grafana_user_gid: "472"
 
 # Templates
 ct_grafana_template_env: "grafana.env.j2"
+ct_grafana_template_provisioning_datasources: "grafana-datasources.yaml.j2"
+ct_grafana_template_provisioning_dashboards: "grafana-dashboards.yaml.j2"
+ct_grafana_template_provisioning_notifiers: "grafana-notifiers.yaml.j2"
+ct_grafana_template_provisioning_plugins: "grafana-plugins.yaml.j2"
 
 # File names
 ct_grafana_file_env: "{{ ct_grafana_ct_name }}.env"
@@ -21,9 +26,30 @@ ct_grafana_file_env: "{{ ct_grafana_ct_name }}.env"
 # Path settings
 ct_grafana_path_config_base: "/etc/ct_grafana"
 ct_grafana_path_config_env: "{{ ct_grafana_path_config_base }}/{{ ct_grafana_file_env }}"
+ct_grafana_path_provisioning: "{{ ct_grafana_path_config_base }}/provisioning"
+ct_grafana_path_dashboards: "{{ ct_grafana_path_provisioning }}/dashboards/import"
 ct_grafana_path_data_base: "/srv/ct_grafana"
 ct_grafana_path_data_volume: "{{ ct_grafana_path_data_base }}/{{ ct_grafana_ct_name }}"
+ct_grafana_path_dashboards_source: "{{ undef }}"
 ct_grafana_path_ct_data: "/var/lib/grafana"
+ct_grafana_path_ct_provisioning: "/etc/grafana/provisioning"
+ct_grafana_path_ct_dashboards: "{{ ct_grafana_path_ct_provisioning }}/dashboards/import"
+
+# Provisioning settings
+# https://grafana.com/docs/grafana/latest/administration/provisioning/
+ct_grafana_provisioning_datasources: []
+ct_grafana_provisioning_delete_datasources: []
+ct_grafana_provisioning_notifiers: []
+ct_grafana_provisioning_delete_notifiers: []
+ct_grafana_provisioning_plugins: []
+ct_grafana_provisioning_dashboards:
+  - name: 'default'
+    orgId: 1
+    folder: ''
+    type: file
+    options:
+      path: "{{ ct_grafana_path_ct_dashboards }}"
+      foldersFromFilesStructure: true
 
 # Network settings
 ct_grafana_bind_addr: "127.0.0.1"
