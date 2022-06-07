@@ -1,8 +1,16 @@
 # Generate by ct_grafana role from https://galaxy.ansible.com/almaops/monitoring
 ---
 apiVersion: 1
+{% if ct_grafana_provisioning_delete_datasources == [] %}
+deleteDatasources: []
+{% else %}
 deleteDatasources:
 {{ ct_grafana_provisioning_delete_datasources | to_nice_yaml }}
+{% endif %}
+{% if ct_grafana_provisioning_datasources == [] %}
+datasources: []
+{% else %}
 datasources:
 {{ ct_grafana_provisioning_datasources | to_nice_yaml }}
+{% endif %}
 ...

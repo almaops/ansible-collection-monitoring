@@ -76,7 +76,8 @@
   ansible.builtin.copy:
     src: "{{ ct_grafana_path_dashboards_source }}"
     dest: "{{ ct_grafana_path_dashboards }}/"
-  when: ct_grafana_path_dashboards_source is defined
+    mode: '0755'
+  when: ct_grafana_path_dashboards_source | default(None) == None
 
 - name: "{{ ct_grafana_task_prefix }} Provision dashboards"
   ansible.builtin.template:
