@@ -5,6 +5,8 @@ ct_loki_task_prefix: "=== GRAFANA LOKI CT ==="
 ct_loki_enable_ports: true
 ct_loki_enable_data_persistence: true
 ct_loki_enable_custom_config: false
+ct_loki_uid: "10001"
+ct_loki_gid: "10001"
 
 # Templates
 ct_loki_template_config: "loki-minio.yaml.j2"
