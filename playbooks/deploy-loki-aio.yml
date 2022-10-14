@@ -1,0 +1,17 @@
+---
+- name: Deploy Loki AIO host
+  hosts:
+    - {{ almaops_target_loki_aio }}
+  become: true
+  roles:
+    - role: almaops.common.docker
+      tags:
+        - docker
+    - role: almaops.common.ct_minio
+      tags:
+        - minio
+    - role: almaops.monitoring.ct_loki
+        - loki
+    - role: almaops.common.nginx
+        - nginx
+...

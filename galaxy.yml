@@ -1,7 +1,7 @@
 ---
 namespace: almaops
 name: monitoring
-version: 1.0.8
+version: 1.0.9
 readme: README.md
 authors:
   - Valentin Gostev <val@le.lc>
@@ -12,6 +12,7 @@ tags:
   - monitoring
   - grafana
 dependencies:
+  almaops.common: '>=1.0.6'
   community.grafana: '>=1.4.0'
 repository: 'https://github.com/almaops/ansible-collection-monitoring'
 homepage: 'https://almaops.com'
