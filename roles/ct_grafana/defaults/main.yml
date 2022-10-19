@@ -24,7 +24,7 @@ ct_grafana_template_provisioning_plugins: "grafana-plugins.yaml.j2"
 
 # File names
 ct_grafana_file_env: "{{ ct_grafana_ct_name }}.env"
-ct_grafana_file_ldap_config:  "{{ ct_grafana_ct_name }}.ldap.toml"
+ct_grafana_file_ldap_config: "{{ ct_grafana_ct_name }}.ldap.toml"
 
 # Path settings
 ct_grafana_path_config_base: "/etc/ct_grafana"
