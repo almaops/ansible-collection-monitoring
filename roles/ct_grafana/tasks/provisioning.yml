@@ -77,7 +77,7 @@
     src: "{{ ct_grafana_path_dashboards_source }}"
     dest: "{{ ct_grafana_path_dashboards }}/"
     mode: '0755'
-  when: ct_grafana_path_dashboards_source | default(None) == None
+  when: ct_grafana_path_dashboards_source | default(None) != None
 
 - name: "{{ ct_grafana_task_prefix }} Provision dashboards"
   ansible.builtin.template:
@@ -89,7 +89,7 @@
   when: ct_grafana_provisioning_dashboards != []
 
 # Remove dashboards definition file if list is empty
-- name: "{{ ct_grafana_task_prefix }} Omit plugins"
+- name: "{{ ct_grafana_task_prefix }} Omit dashboards"
   ansible.builtin.file:
     path: "{{ ct_grafana_path_provisioning }}/dashboards/ansible.yml"
     state: absent
