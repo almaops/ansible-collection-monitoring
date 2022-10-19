@@ -91,7 +91,9 @@ ct_grafana_ldap_bind_password: "change-me"
 ct_grafana_ldap_search_filter: "(cn=%s)"
 ct_grafana_ldap_search_base_dns: "ou=users,dc=grafana,dc=org"
 ct_grafana_ldap_attr_member_of: "memberOf"
-ct_grafana_ldap_attr_email: "email"
+ct_grafana_ldap_attr_email: "mail"
+ct_grafana_ldap_attr_name: "cn"
+ct_grafana_ldap_attr_username: "sAMAccountName"
 
 # Environment variables
 ct_grafana_env_gf_security_admin_user: "{{ undef(hint='You must define default admin username') }}"
