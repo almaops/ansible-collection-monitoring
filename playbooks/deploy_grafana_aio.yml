@@ -1,0 +1,16 @@
+---
+- name: Deploy Grafana AIO host
+  hosts:
+    - "{{ almaops_target_grafana_aio }}"
+  become: true
+  roles:
+    - role: almaops.common.docker
+      tags:
+        - docker
+    - role: almaops.monitoring.ct_grafana
+      tags:
+        - grafana
+    - role: almaops.common.nginx
+      tags:
+        - nginx
+...

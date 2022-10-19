@@ -5,6 +5,7 @@ ct_grafana_task_prefix: "=== GRAFANA CT ==="
 ct_grafana_enable_ports: true
 ct_grafana_enable_data_persistence: true
 ct_grafana_enable_provisioning: false
+ct_grafana_enable_ldap: false
 ct_grafana_domain: "grafana.example.com"
 
 # User settings
@@ -15,6 +16,7 @@ ct_grafana_user_gid: "472"
 
 # Templates
 ct_grafana_template_env: "grafana.env.j2"
+ct_grafana_template_ldap_config: "ldap.toml.j2"
 ct_grafana_template_provisioning_datasources: "grafana-datasources.yaml.j2"
 ct_grafana_template_provisioning_dashboards: "grafana-dashboards.yaml.j2"
 ct_grafana_template_provisioning_notifiers: "grafana-notifiers.yaml.j2"
@@ -22,16 +24,19 @@ ct_grafana_template_provisioning_plugins: "grafana-plugins.yaml.j2"
 
 # File names
 ct_grafana_file_env: "{{ ct_grafana_ct_name }}.env"
+ct_grafana_file_ldap_config:  "{{ ct_grafana_ct_name }}.ldap.toml"
 
 # Path settings
 ct_grafana_path_config_base: "/etc/ct_grafana"
 ct_grafana_path_config_env: "{{ ct_grafana_path_config_base }}/{{ ct_grafana_file_env }}"
+ct_grafana_path_config_ldap: "{{ ct_grafana_path_config_base }}/{{ ct_grafana_file_ldap_config }}"
 ct_grafana_path_provisioning: "{{ ct_grafana_path_config_base }}/provisioning"
 ct_grafana_path_dashboards: "{{ ct_grafana_path_provisioning }}/dashboards/import"
 ct_grafana_path_data_base: "/srv/ct_grafana"
 ct_grafana_path_data_volume: "{{ ct_grafana_path_data_base }}/{{ ct_grafana_ct_name }}"
 ct_grafana_path_dashboards_source: "{{ undef }}"
 ct_grafana_path_ct_data: "/var/lib/grafana"
+ct_grafana_path_ct_ldap_config: "/etc/grafana/ldap.toml"
 ct_grafana_path_ct_provisioning: "/etc/grafana/provisioning"
 ct_grafana_path_ct_dashboards: "{{ ct_grafana_path_ct_provisioning }}/dashboards/import"
 
@@ -75,6 +80,19 @@ ct_grafana_ct_volume_data:
 ct_grafana_ct_volumes_extra: []
 ct_grafana_ct_volumes: "{{ ct_grafana_ct_volume_data + ct_grafana_ct_volumes_extra }}"
 
+# LDAP settings
+ct_grafana_ldap_host: "127.0.0.1"
+ct_grafana_ldap_port: 389
+ct_grafana_ldap_use_ssl: false
+ct_grafana_ldap_start_tls: false
+ct_grafana_ldap_ssl_skip_verify: false
+ct_grafana_ldap_bind_dn: "cn=admin,dc=grafana,dc=org"
+ct_grafana_ldap_bind_password: "change-me"
+ct_grafana_ldap_search_filter: "(cn=%s)"
+ct_grafana_ldap_search_base_dns: "ou=users,dc=grafana,dc=org"
+ct_grafana_ldap_attr_member_of: "memberOf"
+ct_grafana_ldap_attr_email: "email"
+
 # Environment variables
 ct_grafana_env_gf_security_admin_user: "{{ undef(hint='You must define default admin username') }}"
 ct_grafana_env_gf_security_admin_password: "{{ undef(hint='You must define default admin password') }}"
@@ -90,5 +108,9 @@ ct_grafana_env_gf_smtp_host: "smtp.example.com"
 ct_grafana_env_gf_smtp_from_address: "grafana@example.com"
 ct_grafana_env_gf_smtp_user: "grafana@example.com"
 ct_grafana_env_gf_smtp_password: "changeme"
+ct_grafana_env_gf_auth_ldap_enabled: "{{ ct_grafana_enable_ldap }}"
+ct_grafana_env_gf_auth_ldap_config_file: "{{ ct_grafana_path_ct_ldap_config }}"
+ct_grafana_env_gf_auth_ldap_allow_sign_up: true
+ct_grafana_env_gf_auth_ldap_skip_org_role_sync: true
 ct_grafana_env_extra: {}
 ...

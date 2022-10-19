@@ -1,0 +1,15 @@
+---
+- name: "{{ ct_grafana_task_prefix }} Create LDAP config"
+  ansible.builtin.template:
+    src: "{{ ct_grafana_template_ldap_config }}"
+    dest: "{{ ct_grafana_path_config_ldap }}"
+    owner: root
+    group: "{{ ct_grafana_user_group }}"
+    mode: '0440'
+
+# Add LDAP config file to list of mounts of container
+- name: "{{ ct_grafana_task_prefix }} Mount LDAP config"
+  ansible.builtin.set_fact:
+    _ct_grafana_ct_volumes_ldap_config:
+      - "{{ ct_grafana_path_config_ldap }}:{{ ct_grafana_path_ct_ldap_config }}"
+...

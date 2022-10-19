@@ -1,0 +1,14 @@
+[[servers]]
+host = "{{ ct_grafana_ldap_host }}"
+port = {{ ct_grafana_ldap_port }}
+use_ssl = {{ ct_grafana_ldap_use_ssl | string | lower }}
+start_tls = {{ ct_grafana_ldap_start_tls | string | lower }}
+ssl_skip_verify = {{ ct_grafana_ldap_ssl_skip_verify | string | lower }}
+bind_dn = "{{ ct_grafana_ldap_bind_dn }}"
+bind_password = "{{ ct_grafana_ldap_bind_password }}"
+search_filter = "{{ ct_grafana_ldap_search_filter }}"
+search_base_dns = ["{{ ct_grafana_ldap_search_base_dns }}"]
+
+[servers.attributes]
+member_of = "{{ ct_grafana_ldap_attr_member_of }}"
+email =  "{{ ct_grafana_ldap_attr_email }}"

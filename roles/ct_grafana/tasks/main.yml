@@ -49,6 +49,15 @@
   ansible.builtin.include_tasks: provisioning.yml
   when: ct_grafana_enable_provisioning
 
+- name: "{{ ct_grafana_task_prefix }} Un-mount LDAP config"
+  ansible.builtin.set_fact:
+    _ct_grafana_ct_volumes_ldap_config: []
+  when: not ct_grafana_enable_ldap
+
+- name: "{{ ct_grafana_task_prefix }} LDAP Integration"
+  ansible.builtin.include_tasks: ldap.yml
+  when: ct_grafana_enable_ldap
+
 - name: "{{ ct_grafana_task_prefix }} Persist data volume?"
   ansible.builtin.set_fact:
     _ct_grafana_ct_volumes: "{{ ct_grafana_enable_data_persistence | ternary(ct_grafana_ct_volumes, []) }}"
@@ -62,7 +71,7 @@
     restart: "{{ ct_grafana_ct_restart }}"
     pull: "{{ ct_grafana_ct_pull }}"
     ports: "{{ ct_grafana_enable_ports | ternary(ct_grafana_ct_ports, omit) }}"
-    volumes: "{{ _ct_grafana_ct_volumes + _ct_grafana_ct_volumes_provisioning }}"
+    volumes: "{{ _ct_grafana_ct_volumes + _ct_grafana_ct_volumes_provisioning + _ct_grafana_ct_volumes_ldap_config }}"
     user: "{{ ct_grafana_ct_user }}"
     recreate: "{{ ct_grafana_ct_recreate }}"
     env_file: "{{ ct_grafana_path_config_env }}"
