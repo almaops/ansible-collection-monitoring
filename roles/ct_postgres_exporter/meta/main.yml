@@ -1,0 +1,24 @@
+---
+allow_duplicates: true
+galaxy_info:
+  author: Valentin Gostev
+  description: Ansible role deploys container with Postgres Exporter
+  role_name: ct_postgres_exporter
+  namespace: almaops
+  license: MIT
+  min_ansible_version: 2.10
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - all
+  galaxy_tags:
+    - postgres
+    - postgresql
+    - prometheus
+    - exporter
+    - metrics
+dependencies: []
+...

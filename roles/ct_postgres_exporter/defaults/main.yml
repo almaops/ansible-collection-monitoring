@@ -1,0 +1,30 @@
+---
+ct_postgres_exporter_task_prefix: "=== CT POSTGRES EXPORTER ==="
+
+# Common settings
+ct_postgres_exporter_enable_ports: true
+
+# Network settings
+ct_postgres_exporter_bind_addr: "127.0.0.1"
+ct_postgres_exporter_bind_port: "9187"
+ct_postgres_exporter_ct_bind_port: "9187"
+
+# Container settings
+ct_postgres_exporter_ct_name: "postgres-exporter"
+ct_postgres_exporter_ct_version: "latest"
+ct_postgres_exporter_ct_image: "quay.io/prometheuscommunity/postgres-exporter:{{ ct_postgres_exporter_ct_version }}"
+ct_postgres_exporter_ct_state: started
+ct_postgres_exporter_ct_restart_policy: "always"
+ct_postgres_exporter_ct_restart: false
+ct_postgres_exporter_ct_pull: false
+ct_postgres_exporter_ct_recreate: false
+ct_postgres_exporter_ct_network_mode: "default"
+ct_postgres_exporter_ct_networks: []
+ct_postgres_exporter_ct_ports:
+  - "{{ ct_postgres_exporter_bind_addr }}:{{ ct_postgres_exporter_bind_port }}:{{ ct_postgres_exporter_ct_bind_port }}"
+ct_postgres_exporter_ct_env:
+  DATA_SOURCE_NAME: "{{ ct_postgres_exporter_env_data_source_name }}"
+
+# Environment variables
+ct_postgres_exporter_env_data_source_name: "{{ undef(hint='You must specify database connection string') }}"
+...
