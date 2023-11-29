@@ -1,0 +1,24 @@
+#jinja2: trim_blocks: True, lstrip_blocks: True
+{{ ansible_managed | comment }}
+# https://grafana.com/docs/loki/latest/send-data/promtail/configuration/
+
+{% if ct_promtail_config_global != {} %}
+global:
+  {{ ct_promtail_config_global | to_nice_yaml(indent=2,sort_keys=False) | indent(2, False) }}
+{% endif %}
+
+server:
+  {{ ct_promtail_config_server | to_nice_yaml(indent=2,sort_keys=False) | indent(2, False) }}
+
+positions:
+  filename: /run/promtail/positions.yaml
+
+{% if ct_promtail_config_clients != [] %}
+clients:
+  {{ ct_promtail_config_clients | to_nice_yaml(indent=2,sort_keys=False) | indent(2, False) }}
+{% endif %}
+
+{% if ct_promtail_config_scrape_configs != [] %}
+scrape_configs:
+  {{ ct_promtail_config_scrape_configs | to_nice_yaml(indent=2,sort_keys=False) | indent(2, False) }}
+{% endif %}

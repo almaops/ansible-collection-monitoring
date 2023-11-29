@@ -1,0 +1,59 @@
+---
+ct_promtail_task_prefix: "=== CT PROMTAIL ==="
+
+ct_promtail_path_srv: "/srv/ct_promtail/{{ ct_promtail_ct_name }}"
+
+ct_promtail_template_cfg: "config.yml.j2"
+ct_promtail_path_cfg: "{{ ct_promtail_path_srv }}/config"
+ct_promtail_file_cfg: "config.yml"
+
+ct_promtail_ct_name: "promtail"
+ct_promtail_ct_image: "grafana/promtail"
+ct_promtail_ct_image_tag: "2.7.2"
+ct_promtail_ct_restart_policy: "always"
+ct_promtail_ct_pull: "false"
+ct_promtail_ct_recreate: "true"
+ct_promtail_ct_restart: "false"
+ct_promtail_ct_state: "started"
+ct_promtail_ct_ports: []
+ct_promtail_ct_etc_hosts: {}
+ct_promtail_ct_env: {}
+ct_promtail_ct_command:
+  - -config.file=/etc/promtail/config.yml
+
+ct_promtail_ct_volumes_cfg:
+  - "{{ ct_promtail_path_cfg }}:/etc/promtail:ro"
+ct_promtail_ct_volumes_dockersock:
+  - "/var/run/docker.sock:/var/run/docker.sock"
+ct_promtail_ct_volumes_runpromtail:
+  - "/run/promtail:/run/promtail"
+ct_promtail_ct_volumes_extra: []
+ct_promtail_ct_volumes: "{{ ct_promtail_ct_volumes_cfg + ct_promtail_ct_volumes_dockersock + ct_promtail_ct_volumes_runpromtail + ct_promtail_ct_volumes_extra }}"
+
+# Configuration settings
+ct_promtail_config_global: {}
+ct_promtail_config_server:
+  disable: true
+# ct_promtail_config_clients:
+#   - url: http://loki:3100/loki/api/v1/push
+#   - url: https://loki.example.com/loki/api/v1/push
+#     basic_auth:
+#       username: promtail
+#       password: supersecret
+#     external_labels:
+#       some_label: some_value
+
+# By default we collect all container logs from target host
+ct_promtail_config_scrape_configs:
+  - job_name: docker-containers-logs
+    docker_sd_configs:
+      - host: unix:///var/run/docker.sock
+    relabel_configs:
+      - source_labels: ['__meta_docker_container_name']
+        regex: '/(.*)'
+        target_label: 'container'
+      - source_labels: ['__meta_docker_container_log_stream']
+        target_label: 'logstream'
+      - source_labels: ['__meta_docker_container_label_logging_jobname']
+        target_label: 'job'
+...

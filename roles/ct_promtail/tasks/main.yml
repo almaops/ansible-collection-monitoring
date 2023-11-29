@@ -1,0 +1,35 @@
+---
+- name: "{{ ct_promtail_task_prefix }} create directories"
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0700'
+    owner: root
+    group: root
+  loop:
+    - "{{ ct_promtail_path_srv }}"
+    - "{{ ct_promtail_path_cfg }}"
+
+- name: "{{ ct_promtail_task_prefix }} create {{ ct_promtail_path_cfg }}/{{ ct_promtail_file_cfg }}"
+  ansible.builtin.template:
+    src: "{{ ct_promtail_template_cfg }}"
+    dest: "{{ ct_promtail_path_cfg }}/{{ ct_promtail_file_cfg }}"
+    owner: root
+    group: root
+    mode: '0400'
+
+- name: "{{ ct_promtail_task_prefix }} provision container {{ ct_promtail_ct_name }}"
+  community.docker.docker_container:
+    name: "{{ ct_promtail_ct_name }}"
+    image: "{{ ct_promtail_ct_image }}:{{ ct_promtail_ct_image_tag }}"
+    ports: "{{ ct_promtail_ct_ports }}"
+    volumes: "{{ ct_promtail_ct_volumes }}"
+    env: "{{ ct_promtail_ct_env }}"
+    restart_policy: "{{ ct_promtail_ct_restart_policy }}"
+    state: "{{ ct_promtail_ct_state }}"
+    pull: "{{ ct_promtail_ct_pull | bool }}"
+    recreate: "{{ ct_promtail_ct_recreate | bool }}"
+    restart: "{{ ct_promtail_ct_restart | bool }}"
+    etc_hosts: "{{ ct_promtail_ct_etc_hosts }}"
+    command: "{{ ct_promtail_ct_command }}"
+...

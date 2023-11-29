@@ -1,0 +1,21 @@
+---
+galaxy_info:
+  author: Dmitrii Kashin, Valentin Gostev
+  description: Deploy container with Grafana Promtail
+  role_name: ct_promtail
+  namespace: almaops
+  license: MIT
+  min_ansible_version: 2.12
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - all
+  galaxy_tags:
+    - promtail
+    - grafana
+    - loki
+dependencies: []
+...
