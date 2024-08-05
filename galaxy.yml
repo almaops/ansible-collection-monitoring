@@ -1,19 +1,21 @@
 ---
 namespace: almaops
 name: monitoring
-version: 1.0.16
+version: 1.0.17
 readme: README.md
 authors:
   - Valentin Gostev <val@le.lc>
-description: 'This Ansible collection provides roles for deploying your monitoring stack'
+description: 'This Ansible collection provides roles and playbooks for deploying your monitoring stack'
 license:
   - MIT
 tags:
   - monitoring
   - grafana
+  - prometheus
 dependencies:
   almaops.common: '>=1.0.6'
   community.grafana: '>=1.4.0'
+  prometheus.prometheus: '>=0.17.0'
 repository: 'https://github.com/almaops/ansible-collection-monitoring'
 homepage: 'https://almaops.com'
 issues: 'https://github.com/almaops/ansible-collection-monitoring/issues'
