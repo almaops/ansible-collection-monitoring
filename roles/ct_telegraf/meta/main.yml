@@ -1,0 +1,18 @@
+---
+galaxy_info:
+  author: Anastasia Muinova
+  description: Ansible role deploys telegraf container
+  company: AlmaOps
+  role_name: ct_telegraf
+  namespace: almaops
+  license: MIT
+  min_ansible_version: 2.9
+  platforms:
+    - name: Ubuntu
+      versions: all
+    - name: Debian
+      versions: all
+  galaxy_tags:
+    - telegraf
+dependencies: []
+...
