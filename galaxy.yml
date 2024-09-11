@@ -1,7 +1,7 @@
 ---
 namespace: almaops
 name: monitoring
-version: 1.0.17
+version: 1.0.18
 readme: README.md
 authors:
   - Valentin Gostev <val@le.lc>
@@ -22,4 +22,3 @@ issues: 'https://github.com/almaops/ansible-collection-monitoring/issues'
 build_ignore:
   - .gitignore
   - .yamllint
-...
