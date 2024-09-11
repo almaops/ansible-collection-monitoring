@@ -1,0 +1,46 @@
+---
+ct_telegraf_task_prefix: "=== CT TELEGRAF ==="
+# Common settings
+ct_telegraf_bind_addr: "127.0.0.1"
+ct_telegraf_bind_port: "9101"
+ct_telegraf_ct_port: "9101"
+ct_telegraf_path_config: "/etc/telegraf"
+ct_telegraf_file_config: "telegraf.conf"
+ct_telegraf_template_config: "telegraf.conf.j2"
+ct_telegraf_log_dir: "/var/log/telegraf"
+
+# config settings
+ct_telegraf_interval: "10s"
+ct_telegraf_round_interval: "true"
+ct_telegraf_flush_interval: "10s"
+ct_telegraf_flush_jitter: "0s"
+ct_telegraf_debug: "false"
+ct_telegraf_hostname: ""
+ct_telegraf_logfile: "{{ ct_telegraf_log_dir }}/telegraf.log"
+
+# redefine to collect and redirect metrics
+ct_telegraf_inputs_block: "[[inputs.cpu]]"
+
+ct_telegraf_outputs_block: |
+  [[outputs.prometheus_client]]
+    listen = "0.0.0.0:{{ ct_telegraf_ct_port }}"
+    string_as_label = false
+
+# Container settings
+ct_telegraf_ct_hostname: "{{ inventory_hostname }}"
+ct_telegraf_ct_name: "telegraf"
+ct_telegraf_ct_image: "telegraf"
+ct_telegraf_ct_version: "1.28.3"
+ct_telegraf_ct_restart_policy: "always"
+ct_telegraf_ct_state: "started"
+ct_telegraf_ct_restart: "no"
+ct_telegraf_ct_pull: "no"
+ct_telegraf_ct_recreate: "no"
+ct_telegraf_path_data: "{{ ct_telegraf_path_config }}/{{ ct_telegraf_file_config }}"
+ct_telegraf_ct_network_mode: "host"
+ct_telegraf_ct_volumes:
+  - "{{ ct_telegraf_path_data }}:/etc/telegraf/telegraf.conf"
+  - "{{ ct_telegraf_log_dir }}:/var/log/telegraf"
+ct_telegraf_ct_ports:
+  - "{{ ct_telegraf_bind_addr }}:{{ ct_telegraf_bind_port }}:{{ ct_telegraf_ct_port }}"
+...

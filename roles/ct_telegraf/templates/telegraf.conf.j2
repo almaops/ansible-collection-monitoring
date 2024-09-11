@@ -1,0 +1,14 @@
+[tags]
+
+[agent]
+  interval = "{{ ct_telegraf_interval }}"
+  round_interval = {{ ct_telegraf_round_interval }}
+  flush_interval = "{{ ct_telegraf_flush_interval }}"
+  flush_jitter = "{{ ct_telegraf_flush_jitter }}"
+  debug = {{ ct_telegraf_debug }}
+  hostname = "{{ ct_telegraf_hostname }}"
+  logfile = "{{ ct_telegraf_logfile }}"
+
+{{ ct_telegraf_outputs_block }}
+
+{{ ct_telegraf_inputs_block }}
