@@ -47,5 +47,5 @@
     ports: "{{ ct_loki_ct_ports }}"
     command: "{{ ct_loki_ct_command }}"
     container_default_behavior: "no_defaults"
-    volumes: "{{ ( ct_loki_enable_custom_config | ternary(ct_loki_ct_volume_config, []) ) + ( ct_loki_enable_data_persistence | ternary(ct_loki_ct_volumes, []) ) }}"
+    volumes: "{{ (ct_loki_enable_custom_config | ternary(ct_loki_ct_volume_config, [])) + (ct_loki_enable_data_persistence | ternary(ct_loki_ct_volumes, [])) }}"
 ...

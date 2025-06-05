@@ -7,13 +7,6 @@ galaxy_info:
   namespace: almaops
   license: MIT
   min_ansible_version: "2.15"
-  platforms:
-    - name: AIX
-      versions: []
-    - name: Ubuntu
-      versions: all
-    - name: Debian
-      versions: all
   galaxy_tags:
     - grafana
     - loki
