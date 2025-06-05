@@ -15,7 +15,7 @@ tags:
 dependencies:
   almaops.common: '>=1.0.6'
   community.grafana: '>=1.4.0'
-  prometheus.prometheus: '>=0.17.0'
+  prometheus.prometheus: '>=0.17.0' 
 repository: 'https://github.com/almaops/ansible-collection-monitoring'
 homepage: 'https://almaops.com'
 issues: 'https://github.com/almaops/ansible-collection-monitoring/issues'

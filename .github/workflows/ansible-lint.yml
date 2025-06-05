@@ -2,7 +2,7 @@
 name: ansible-lint
 on:
   push:
-    branched: [actions]
+    branched: [ actions ]
 jobs:
   build:
     name: Ansible Lint
@@ -17,3 +17,4 @@ jobs:
           setup_python: "true"
           working_directory: ""
           requirements_file: ""
+...

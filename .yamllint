@@ -22,7 +22,7 @@ rules:
   octal-values:
     forbid-implicit-octal: true
   trailing-spaces: enable
-  comments: 
+  comments:
     min-spaces-from-content: 1
   comments-indentation: false
 ...

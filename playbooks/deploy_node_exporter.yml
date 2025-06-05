@@ -1,7 +1,6 @@
 ---
 - name: Deploy node-exporter
-  hosts:
-    - "{{ almaops_target_node_exporter }}"
+  hosts: "{{ almaops_target_node_exporter | default([]) }}"
   become: true
   roles:
     - role: prometheus.prometheus.node_exporter
