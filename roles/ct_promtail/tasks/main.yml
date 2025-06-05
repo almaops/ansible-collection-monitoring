@@ -10,7 +10,7 @@
     - "{{ ct_promtail_path_srv }}"
     - "{{ ct_promtail_path_cfg }}"
 
-- name: "=== CT PROMTAIL === create {{ ct_promtail_path_cfg }}/{{ ct_promtail_file_cfg }}"
+- name: "=== CT PROMTAIL === create config file"
   ansible.builtin.template:
     src: "{{ ct_promtail_template_cfg }}"
     dest: "{{ ct_promtail_path_cfg }}/{{ ct_promtail_file_cfg }}"

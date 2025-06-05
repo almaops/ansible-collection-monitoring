@@ -1,5 +1,6 @@
 ---
 - name: "=== CT GRAFANA LOKI === If custom config enabled"
+  when: ct_loki_enable_custom_config | bool
   block:
     - name: "=== CT GRAFANA LOKI === Create config directory"
       ansible.builtin.file:
@@ -15,9 +16,9 @@
         owner: root
         group: root
         mode: '0644'
-  when: ct_loki_enable_custom_config | bool
 
 - name: "=== CT GRAFANA LOKI === If data persistence enabled"
+  when: ct_loki_enable_data_persistence | bool
   block:
     - name: "=== CT GRAFANA LOKI === Create directory for data volumes"
       ansible.builtin.file:
@@ -33,7 +34,6 @@
         owner: "{{ ct_loki_uid }}"
         group: "{{ ct_loki_gid }}"
         mode: '0755'
-  when: ct_loki_enable_data_persistence | bool
 
 - name: "=== CT GRAFANA LOKI === Create container"
   community.docker.docker_container:
@@ -47,5 +47,5 @@
     ports: "{{ ct_loki_ct_ports }}"
     command: "{{ ct_loki_ct_command }}"
     container_default_behavior: "no_defaults"
-    volumes: "{{ ( ct_loki_enable_custom_config | ternary(ct_loki_ct_volume_config,[]) ) + ( ct_loki_enable_data_persistence | ternary(ct_loki_ct_volumes,[]) ) }}"
+    volumes: "{{ ( ct_loki_enable_custom_config | ternary(ct_loki_ct_volume_config, []) ) + ( ct_loki_enable_data_persistence | ternary(ct_loki_ct_volumes, []) ) }}"
 ...

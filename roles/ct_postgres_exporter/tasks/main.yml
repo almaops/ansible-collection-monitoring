@@ -1,5 +1,5 @@
 ---
-- name: "{{ ct_postgres_exporter_task_prefix }} Create container"
+- name: "=== CT POSTGRES EXPORTER === Create container"
   community.docker.docker_container:
     image: "{{ ct_postgres_exporter_ct_image }}"
     name: "{{ ct_postgres_exporter_ct_name }}"
