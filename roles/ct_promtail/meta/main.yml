@@ -13,6 +13,8 @@ galaxy_info:
     - name: Debian
       versions:
         - all
+    - name: AIX
+      versions: []
   galaxy_tags:
     - promtail
     - grafana

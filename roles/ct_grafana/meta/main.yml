@@ -12,6 +12,8 @@ galaxy_info:
       versions: all
     - name: Debian
       versions: all
+    - name: AIX
+      versions: []
   galaxy_tags:
     - grafana
     - monitoring
