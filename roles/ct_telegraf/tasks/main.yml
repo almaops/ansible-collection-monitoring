@@ -1,0 +1,32 @@
+---
+- name: "{{ ct_telegraf_task_prefix }} Create config directory"
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0644'
+    recurse: true
+  loop:
+    - "{{ ct_telegraf_log_dir }}"
+    - "{{ ct_telegraf_path_config }}"
+
+- name: "{{ ct_telegraf_task_prefix }} Create config file"
+  ansible.builtin.template:
+    src: "{{ ct_telegraf_template_config }}"
+    dest: "{{ ct_telegraf_path_config }}/{{ ct_telegraf_file_config }}"
+    mode: '0644'
+  register: ct_telegraf_config
+
+- name: "{{ ct_telegraf_task_prefix }} Create telegraf container"
+  community.docker.docker_container:
+    hostname: "{{ ct_telegraf_ct_hostname }}"
+    name: "{{ ct_telegraf_ct_name }}"
+    image: "{{ ct_telegraf_ct_image }}:{{ ct_telegraf_ct_version }}"
+    ports: "{{ ct_telegraf_ct_ports }}"
+    restart_policy: "{{ ct_telegraf_ct_restart_policy }}"
+    state: "{{ ct_telegraf_ct_state }}"
+    restart: "{{ ct_telegraf_config.changed | default(ct_telegraf_ct_restart) | bool }}"
+    pull: "{{ ct_telegraf_ct_pull | bool }}"
+    recreate: "{{ ct_telegraf_ct_recreate | bool }}"
+    volumes: "{{ ct_telegraf_ct_volumes }}"
+    network_mode: "{{ ct_telegraf_ct_network_mode }}"
+...
