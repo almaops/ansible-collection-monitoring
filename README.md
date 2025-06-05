@@ -1,4 +1,5 @@
 [![License](https://img.shields.io/badge/license-MIT%20License-brightgreen.svg)](./LICENSE)
+[![ansible-lint](https://github.com/almaops/ansible-collection-monitoring/actions/workflows/ansible-lint.yml/badge.svg?branch=main)](https://github.com/almaops/ansible-collection-monitoring/actions/workflows/ansible-lint.yml)
 # Ansible Collection - almaops.monitoring
 
 ## Description
