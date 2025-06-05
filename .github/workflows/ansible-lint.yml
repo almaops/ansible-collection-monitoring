@@ -2,7 +2,9 @@
 name: ansible-lint
 on:
   push:
-    branched: [ actions ]
+    branched: [ main ]
+  pull_request:
+    branches: [ main ]
 jobs:
   build:
     name: Ansible Lint
