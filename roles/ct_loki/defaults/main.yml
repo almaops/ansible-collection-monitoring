@@ -1,5 +1,5 @@
 ---
-ct_loki_task_prefix: "=== GRAFANA LOKI CT ==="
+ct_loki_task_prefix: "=== CT GRAFANA LOKI ==="
 
 # Common settings
 ct_loki_enable_ports: true

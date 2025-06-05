@@ -7,14 +7,14 @@ galaxy_info:
   license: MIT
   min_ansible_version: "2.15"
   platforms:
+    - name: AIX
+      versions: []
     - name: Ubuntu
       versions:
         - all
     - name: Debian
       versions:
         - all
-    - name: AIX
-      versions: []
   galaxy_tags:
     - promtail
     - grafana
