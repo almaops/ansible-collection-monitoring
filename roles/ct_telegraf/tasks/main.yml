@@ -1,5 +1,5 @@
 ---
-- name: "{{ ct_telegraf_task_prefix }} Create config directory"
+- name: "=== CT TELEGRAF === Create config directory"
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
@@ -9,14 +9,14 @@
     - "{{ ct_telegraf_log_dir }}"
     - "{{ ct_telegraf_path_config }}"
 
-- name: "{{ ct_telegraf_task_prefix }} Create config file"
+- name: "=== CT TELEGRAF === Create config file"
   ansible.builtin.template:
     src: "{{ ct_telegraf_template_config }}"
     dest: "{{ ct_telegraf_path_config }}/{{ ct_telegraf_file_config }}"
     mode: '0644'
   register: ct_telegraf_config
 
-- name: "{{ ct_telegraf_task_prefix }} Create telegraf container"
+- name: "=== CT TELEGRAF === Create telegraf container"
   community.docker.docker_container:
     hostname: "{{ ct_telegraf_ct_hostname }}"
     name: "{{ ct_telegraf_ct_name }}"

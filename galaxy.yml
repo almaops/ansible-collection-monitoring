@@ -26,4 +26,3 @@ build_ignore:
   - .yamllint
   - .github
 ...
-
