@@ -1,11 +1,12 @@
----
 namespace: almaops
 name: monitoring
-version: 1.0.19
+version: 1.0.20
 readme: README.md
 authors:
   - Valentin Gostev <val@le.lc>
-description: 'This Ansible collection provides roles and playbooks for deploying your monitoring stack'
+description: >-
+  This Ansible collection provides roles and playbooks for deploying your
+  monitoring stack
 license:
   - MIT
 tags:
@@ -25,4 +26,3 @@ build_ignore:
   - .gitignore
   - .yamllint
   - .github
-...
