@@ -1,41 +1,41 @@
 ---
-- name: "{{ ct_loki_task_prefix }} If custom config enabled"
+- name: "=== CT GRAFANA LOKI === If custom config enabled"
+  when: ct_loki_enable_custom_config | bool
   block:
-    - name: "{{ ct_loki_task_prefix }} Create config directory"
+    - name: "=== CT GRAFANA LOKI === Create config directory"
       ansible.builtin.file:
         path: "{{ ct_loki_path_config_base }}"
         state: directory
         owner: root
         group: root
         mode: '0755'
-    - name: "{{ ct_loki_task_prefix }} Create custom config file"
+    - name: "=== CT GRAFANA LOKI === Create custom config file"
       ansible.builtin.template:
         src: "{{ ct_loki_template_config }}"
         dest: "{{ ct_loki_path_config_file }}"
         owner: root
         group: root
         mode: '0644'
-  when: ct_loki_enable_custom_config | bool
 
-- name: "{{ ct_loki_task_prefix }} If data persistence enabled"
+- name: "=== CT GRAFANA LOKI === If data persistence enabled"
+  when: ct_loki_enable_data_persistence | bool
   block:
-    - name: "{{ ct_loki_task_prefix }} Create directory for data volumes"
+    - name: "=== CT GRAFANA LOKI === Create directory for data volumes"
       ansible.builtin.file:
         path: "{{ ct_loki_path_data_base }}"
         state: directory
         owner: root
         group: root
         mode: '0755'
-    - name: "{{ ct_loki_task_prefix }} Create data directory"
+    - name: "=== CT GRAFANA LOKI === Create data directory"
       ansible.builtin.file:
         path: "{{ ct_loki_path_data_volume }}"
         state: directory
         owner: "{{ ct_loki_uid }}"
         group: "{{ ct_loki_gid }}"
         mode: '0755'
-  when: ct_loki_enable_data_persistence | bool
 
-- name: "{{ ct_loki_task_prefix }} Create container"
+- name: "=== CT GRAFANA LOKI === Create container"
   community.docker.docker_container:
     name: "{{ ct_loki_ct_name }}"
     image: "{{ ct_loki_ct_image }}"
@@ -47,5 +47,5 @@
     ports: "{{ ct_loki_ct_ports }}"
     command: "{{ ct_loki_ct_command }}"
     container_default_behavior: "no_defaults"
-    volumes: "{{ ( ct_loki_enable_custom_config|ternary(ct_loki_ct_volume_config,[]) ) + ( ct_loki_enable_data_persistence|ternary(ct_loki_ct_volumes,[]) ) }}"
+    volumes: "{{ (ct_loki_enable_custom_config | ternary(ct_loki_ct_volume_config, [])) + (ct_loki_enable_data_persistence | ternary(ct_loki_ct_volumes, [])) }}"
 ...

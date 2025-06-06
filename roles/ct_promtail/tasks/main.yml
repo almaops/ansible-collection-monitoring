@@ -1,5 +1,5 @@
 ---
-- name: "{{ ct_promtail_task_prefix }} create directories"
+- name: "=== CT PROMTAIL === create directories"
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
@@ -10,7 +10,7 @@
     - "{{ ct_promtail_path_srv }}"
     - "{{ ct_promtail_path_cfg }}"
 
-- name: "{{ ct_promtail_task_prefix }} create {{ ct_promtail_path_cfg }}/{{ ct_promtail_file_cfg }}"
+- name: "=== CT PROMTAIL === create config file"
   ansible.builtin.template:
     src: "{{ ct_promtail_template_cfg }}"
     dest: "{{ ct_promtail_path_cfg }}/{{ ct_promtail_file_cfg }}"
@@ -18,7 +18,7 @@
     group: root
     mode: '0400'
 
-- name: "{{ ct_promtail_task_prefix }} provision container {{ ct_promtail_ct_name }}"
+- name: "=== CT PROMTAIL === provision container {{ ct_promtail_ct_name }}"
   community.docker.docker_container:
     name: "{{ ct_promtail_ct_name }}"
     image: "{{ ct_promtail_ct_image }}:{{ ct_promtail_ct_image_tag }}"

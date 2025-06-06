@@ -1,11 +1,11 @@
 ---
-- name: "{{ ct_grafana_task_prefix }} Create grafana group"
+- name: "=== GRAFANA CT === Create grafana group"
   ansible.builtin.group:
     name: "{{ ct_grafana_user_group }}"
     state: present
     gid: "{{ ct_grafana_user_gid }}"
 
-- name: "{{ ct_grafana_task_prefix }} Create grafana user"
+- name: "=== GRAFANA CT === Create grafana user"
   ansible.builtin.user:
     name: "{{ ct_grafana_user_name }}"
     system: true
@@ -13,7 +13,7 @@
     group: "{{ ct_grafana_user_group }}"
     uid: "{{ ct_grafana_user_uid }}"
 
-- name: "{{ ct_grafana_task_prefix }} Create base directories"
+- name: "=== GRAFANA CT === Create base directories"
   ansible.builtin.file:
     state: directory
     path: "{{ item }}"
@@ -24,7 +24,7 @@
     - "{{ ct_grafana_path_config_base }}"
     - "{{ ct_grafana_path_data_base }}"
 
-- name: "{{ ct_grafana_task_prefix }} Create env file"
+- name: "=== GRAFANA CT === Create env file"
   ansible.builtin.template:
     src: "{{ ct_grafana_template_env }}"
     dest: "{{ ct_grafana_path_config_env }}"
@@ -32,7 +32,7 @@
     group: root
     mode: '0755'
 
-- name: "{{ ct_grafana_task_prefix }} Create data directory"
+- name: "=== GRAFANA CT === Create data directory"
   ansible.builtin.file:
     state: directory
     path: "{{ ct_grafana_path_data_volume }}"
@@ -40,29 +40,29 @@
     group: "{{ ct_grafana_user_group }}"
     mode: '0755'
 
-- name: "{{ ct_grafana_task_prefix }} Un-mount provisioning directory"
+- name: "=== GRAFANA CT === Un-mount provisioning directory"
   ansible.builtin.set_fact:
     _ct_grafana_ct_volumes_provisioning: []
   when: not ct_grafana_enable_provisioning
 
-- name: "{{ ct_grafana_task_prefix }} Provisioning"
+- name: "=== GRAFANA CT === Provisioning"
   ansible.builtin.include_tasks: provisioning.yml
   when: ct_grafana_enable_provisioning
 
-- name: "{{ ct_grafana_task_prefix }} Un-mount LDAP config"
+- name: "=== GRAFANA CT === Un-mount LDAP config"
   ansible.builtin.set_fact:
     _ct_grafana_ct_volumes_ldap_config: []
   when: not ct_grafana_enable_ldap
 
-- name: "{{ ct_grafana_task_prefix }} LDAP Integration"
+- name: "=== GRAFANA CT === LDAP Integration"
   ansible.builtin.include_tasks: ldap.yml
   when: ct_grafana_enable_ldap
 
-- name: "{{ ct_grafana_task_prefix }} Persist data volume?"
+- name: "=== GRAFANA CT === Persist data volume?"
   ansible.builtin.set_fact:
     _ct_grafana_ct_volumes: "{{ ct_grafana_enable_data_persistence | ternary(ct_grafana_ct_volumes, []) }}"
 
-- name: "{{ ct_grafana_task_prefix }} Create container"
+- name: "=== GRAFANA CT === Create container"
   community.docker.docker_container:
     name: "{{ ct_grafana_ct_name }}"
     image: "{{ ct_grafana_ct_image }}"
