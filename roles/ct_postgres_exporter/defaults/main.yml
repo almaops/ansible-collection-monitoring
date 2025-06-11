@@ -1,6 +1,4 @@
 ---
-ct_postgres_exporter_task_prefix: "=== CT POSTGRES EXPORTER ==="
-
 # Common settings
 ct_postgres_exporter_enable_ports: true
 
