@@ -2,9 +2,17 @@
 name: ansible-lint
 on:
   push:
-    branched: [ main ]
+    branches: [ main ]
+    paths:
+      - 'roles/**'
+      - 'playbooks/**'
+      - '.github/workflows/ansible-lint.yml'
   pull_request:
     branches: [ main ]
+    paths:
+      - 'roles/**'
+      - 'playbooks/**'
+      - '.github/workflows/ansible-lint.yml'
 jobs:
   build:
     name: Ansible Lint
