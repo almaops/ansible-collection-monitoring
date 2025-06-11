@@ -12,4 +12,6 @@
     networks: "{{ ct_postgres_exporter_ct_networks }}"
     ports: "{{ ct_postgres_exporter_enable_ports | ternary(ct_postgres_exporter_ct_ports, omit) }}"
     env: "{{ ct_postgres_exporter_ct_env }}"
+    init: "{{ ct_postgres_exporter_ct_init }}"
+    command: "{{ ct_postgres_exporter_ct_command }}"
 ...

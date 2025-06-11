@@ -24,6 +24,8 @@ ct_postgres_exporter_ct_ports:
   - "{{ ct_postgres_exporter_bind_addr }}:{{ ct_postgres_exporter_bind_port }}:{{ ct_postgres_exporter_ct_bind_port }}"
 ct_postgres_exporter_ct_env:
   DATA_SOURCE_NAME: "{{ ct_postgres_exporter_env_data_source_name }}"
+ct_postgres_exporter_ct_init: true
+ct_postgres_exporter_ct_command: []
 
 # Environment variables
 ct_postgres_exporter_env_data_source_name: "{{ undef(hint='You must specify database connection string') }}"
