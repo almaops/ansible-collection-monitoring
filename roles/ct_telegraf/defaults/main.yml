@@ -30,7 +30,7 @@ ct_telegraf_outputs_block: |
 ct_telegraf_ct_hostname: "{{ inventory_hostname }}"
 ct_telegraf_ct_name: "telegraf"
 ct_telegraf_ct_image: "telegraf"
-ct_telegraf_ct_version: "1.28.3"
+ct_telegraf_ct_version: "1.35.1"
 ct_telegraf_ct_restart_policy: "always"
 ct_telegraf_ct_state: "started"
 ct_telegraf_ct_restart: "no"

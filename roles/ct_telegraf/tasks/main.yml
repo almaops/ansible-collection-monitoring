@@ -1,13 +1,17 @@
 ---
 - name: "=== CT TELEGRAF === Create config directory"
   ansible.builtin.file:
-    path: "{{ item }}"
+    path: "{{ item.dir | default(item) }}"
     state: directory
-    mode: '0644'
+    mode: "{{ item.mode | default('0755') }}"
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('root') }}"
     recurse: true
   loop:
-    - "{{ ct_telegraf_log_dir }}"
     - "{{ ct_telegraf_path_config }}"
+    - dir: "{{ ct_telegraf_log_dir }}"
+      owner: "999"
+      group: "999"
 
 - name: "=== CT TELEGRAF === Create config file"
   ansible.builtin.template:
