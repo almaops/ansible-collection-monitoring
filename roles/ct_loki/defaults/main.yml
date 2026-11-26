@@ -1,57 +1,84 @@
 ---
-ct_loki_task_prefix: "=== CT GRAFANA LOKI ==="
-
 # Common settings
-ct_loki_enable_ports: true
-ct_loki_enable_data_persistence: true
-ct_loki_enable_custom_config: false
 ct_loki_uid: "10001"
 ct_loki_gid: "10001"
 
 # Templates
-ct_loki_template_config: "loki-minio.yaml.j2"
-
-# Files
-ct_loki_file_config: "{{ ct_loki_ct_name }}.yaml"
-
-# Network settings
-ct_loki_bind_addr: "127.0.0.1"
-ct_loki_bind_addr_http: "{{ ct_loki_bind_addr }}"
-ct_loki_bind_port_http: "3100"
-ct_loki_bind_ct_port_http: "3100"
+ct_loki_template_env: "env.j2"
+ct_loki_template_config: "config.yml.j2"
+ct_loki_template_compose: "compose.yml.j2"
 
 # Path settings
-ct_loki_path_config_base: "/etc/ct_loki"
-ct_loki_path_config_file: "{{ ct_loki_path_config_base }}/{{ ct_loki_file_config }}"
-ct_loki_path_data_base: "/srv/ct_loki"
-ct_loki_path_data_volume: "{{ ct_loki_path_data_base }}/{{ ct_loki_ct_name }}"
-ct_loki_path_ct_config: "/etc/loki/local-config.yaml"
+ct_loki_path_root: "/srv/ct_loki"
+ct_loki_path_base: "{{ ct_loki_path_root }}/{{ ct_loki_ct_name }}"
+ct_loki_path_data: "{{ ct_loki_path_base }}/data"
+ct_loki_path_compose: "{{ ct_loki_path_base }}/docker-compose.yml"
+ct_loki_path_env: "{{ ct_loki_path_base }}/loki.env"
+ct_loki_path_config: "{{ ct_loki_path_base }}/config.yml"
+ct_loki_path_ct_config: "/etc/loki/config.yml"
 ct_loki_path_ct_data: "/loki"
 
 # Container settings
 ct_loki_ct_name: "grafana-loki"
-ct_loki_ct_version: "latest"
+ct_loki_ct_version: "3.7.10"
 ct_loki_ct_image: "grafana/loki:{{ ct_loki_ct_version }}"
 ct_loki_ct_restart_policy: "always"
-ct_loki_ct_state: "started"
-ct_loki_ct_restart: false
-ct_loki_ct_pull: false
-ct_loki_ct_recreate: false
-ct_loki_ct_ports_http:
-  - "{{ ct_loki_bind_addr_http }}:{{ ct_loki_bind_port_http }}:{{ ct_loki_bind_ct_port_http }}"
-ct_loki_ct_ports_extra: []
-ct_loki_ct_ports: "{{ ct_loki_ct_ports_http + ct_loki_ct_ports_extra }}"
-ct_loki_ct_volume_config:
-  - "{{ ct_loki_path_config_file }}:{{ ct_loki_path_ct_config }}:ro"
-ct_loki_ct_volumes_data:
-  - "{{ ct_loki_path_data_volume }}:{{ ct_loki_path_ct_data }}"
+ct_loki_ct_ports:
+  - "127.0.0.1:3100:3100"
+ct_loki_ct_volumes:
+  - "{{ ct_loki_path_config }}:{{ ct_loki_path_ct_config }}:ro"
+  - "{{ ct_loki_path_data }}:{{ ct_loki_path_ct_data }}"
 ct_loki_ct_volumes_extra: []
-ct_loki_ct_volumes: "{{ ct_loki_ct_volumes_data + ct_loki_ct_volumes_extra }}"
-ct_loki_ct_command: []
+ct_loki_ct_volumes_all: "{{ ct_loki_ct_volumes + ct_loki_ct_volumes_extra }}"
+ct_loki_command:
+  - "-config.file={{ ct_loki_path_ct_config }}"
+  - "-config.expand-env=true"
+ct_loki_networks: []
+ct_loki_compose_extra_networks: {}
 
-# Configuration parameters
-ct_loki_conf_s3_endpoint: "127.0.0.1:9000"
-ct_loki_conf_s3_bucket: "loki"
-ct_loki_conf_s3_access_key: "changeme"
-ct_loki_conf_s3_secret_key: "changeme"
+ct_loki_env: {}
+
+# Base Loki configuration (override per host/group/env via ct_loki_config_custom)
+ct_loki_config_defaults:
+  auth_enabled: false
+  server:
+    http_listen_port: 3100
+    grpc_listen_port: 9096
+    log_level: info
+  common:
+    path_prefix: /loki
+    replication_factor: 1
+    ring:
+      instance_addr: 127.0.0.1
+      kvstore:
+        store: inmemory
+  storage_config:
+    tsdb_shipper:
+      active_index_directory: /loki/tsdb-index
+      cache_location: /loki/tsdb-cache
+    filesystem:
+      directory: /loki/chunks
+  schema_config:
+    configs:
+      - from: "2024-04-01"
+        store: tsdb
+        object_store: filesystem
+        schema: v13
+        index:
+          prefix: index_
+          period: 24h
+  limits_config:
+    reject_old_samples: true
+    reject_old_samples_max_age: 168h
+    retention_period: 744h
+  compactor:
+    working_directory: /loki/compactor
+    compaction_interval: 10m
+    retention_enabled: true
+    retention_delete_delay: 2h
+    delete_request_store: filesystem
+
+ct_loki_config_custom: {}
+
+ct_loki_config: "{{ ct_loki_config_defaults | combine(ct_loki_config_custom | default({}), recursive=True) }}"
 ...

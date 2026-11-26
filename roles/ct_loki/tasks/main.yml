@@ -1,51 +1,68 @@
 ---
-- name: "=== CT GRAFANA LOKI === If custom config enabled"
-  when: ct_loki_enable_custom_config | bool
-  block:
-    - name: "=== CT GRAFANA LOKI === Create config directory"
-      ansible.builtin.file:
-        path: "{{ ct_loki_path_config_base }}"
-        state: directory
-        owner: root
-        group: root
-        mode: '0755'
-    - name: "=== CT GRAFANA LOKI === Create custom config file"
-      ansible.builtin.template:
-        src: "{{ ct_loki_template_config }}"
-        dest: "{{ ct_loki_path_config_file }}"
-        owner: root
-        group: root
-        mode: '0644'
+- name: Ensure Loki directories exist
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "{{ item.mode }}"
+  loop:
+    - path: "{{ ct_loki_path_root }}"
+      owner: root
+      group: root
+      mode: "0755"
+    - path: "{{ ct_loki_path_base }}"
+      owner: root
+      group: root
+      mode: "0755"
+    - path: "{{ ct_loki_path_data }}"
+      owner: "{{ ct_loki_uid }}"
+      group: "{{ ct_loki_gid }}"
+      mode: "0750"
 
-- name: "=== CT GRAFANA LOKI === If data persistence enabled"
-  when: ct_loki_enable_data_persistence | bool
-  block:
-    - name: "=== CT GRAFANA LOKI === Create directory for data volumes"
-      ansible.builtin.file:
-        path: "{{ ct_loki_path_data_base }}"
-        state: directory
-        owner: root
-        group: root
-        mode: '0755'
-    - name: "=== CT GRAFANA LOKI === Create data directory"
-      ansible.builtin.file:
-        path: "{{ ct_loki_path_data_volume }}"
-        state: directory
-        owner: "{{ ct_loki_uid }}"
-        group: "{{ ct_loki_gid }}"
-        mode: '0755'
+- name: Render Loki configuration file
+  ansible.builtin.template:
+    src: "{{ ct_loki_template_config }}"
+    dest: "{{ ct_loki_path_config }}"
+    owner: root
+    group: root
+    mode: "0644"
+  register: ct_loki_config_rendered
 
-- name: "=== CT GRAFANA LOKI === Create container"
-  community.docker.docker_container:
-    name: "{{ ct_loki_ct_name }}"
-    image: "{{ ct_loki_ct_image }}"
-    state: "{{ ct_loki_ct_state }}"
-    restart_policy: "{{ ct_loki_ct_restart_policy }}"
-    restart: "{{ ct_loki_ct_restart | bool }}"
-    pull: "{{ ct_loki_ct_pull | bool }}"
-    recreate: "{{ ct_loki_ct_recreate | bool }}"
-    ports: "{{ ct_loki_ct_ports }}"
-    command: "{{ ct_loki_ct_command }}"
-    container_default_behavior: "no_defaults"
-    volumes: "{{ (ct_loki_enable_custom_config | ternary(ct_loki_ct_volume_config, [])) + (ct_loki_enable_data_persistence | ternary(ct_loki_ct_volumes, [])) }}"
-...
+- name: Read rendered Loki configuration for hash calculation
+  ansible.builtin.slurp:
+    src: "{{ ct_loki_path_config }}"
+  register: ct_loki_config_slurp
+  when: not ansible_check_mode or ct_loki_config_rendered.changed
+
+- name: Set Loki configuration SHA256 fact
+  ansible.builtin.set_fact:
+    ct_loki_config_hash: >-
+      {{
+        (ct_loki_config_slurp.content | b64decode | hash('sha256'))
+        if (ct_loki_config_slurp is defined and ct_loki_config_slurp.content is defined)
+        else (lookup('template', ct_loki_template_config) | hash('sha256'))
+      }}
+
+- name: Render Loki environment file
+  ansible.builtin.template:
+    src: "{{ ct_loki_template_env }}"
+    dest: "{{ ct_loki_path_env }}"
+    owner: root
+    group: root
+    mode: "0600"
+
+- name: Render Docker Compose file for Loki
+  ansible.builtin.template:
+    src: "{{ ct_loki_template_compose }}"
+    dest: "{{ ct_loki_path_compose }}"
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Ensure Loki compose stack is running
+  community.docker.docker_compose_v2:
+    project_src: "{{ ct_loki_path_base }}"
+    state: present
+    pull: missing
+    remove_orphans: true

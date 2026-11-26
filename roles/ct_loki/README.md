@@ -3,8 +3,8 @@
 
 # Requirements
 On target hosts:
-- Docker Engine installed
-- Python PIP's `docker` module installed
+- Docker Engine installed with Compose plugin
+- `python3-docker` installed
 
 # Role variables
 Please refer to [defaults/main.yml](./defaults/main.yml) for full list of available variables. 

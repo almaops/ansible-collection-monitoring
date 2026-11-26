@@ -1,0 +1,37 @@
+# Managed by Ansible (almaops.monitoring.ct_loki)
+services:
+  {{ ct_loki_ct_name }}:
+    image: "{{ ct_loki_ct_image }}"
+    container_name: "{{ ct_loki_ct_name }}"
+    restart: "{{ ct_loki_ct_restart_policy }}"
+    env_file:
+      - "{{ ct_loki_path_env }}"
+{% if ct_loki_command | length > 0 %}
+    command:
+{% for arg in ct_loki_command %}
+      - "{{ arg }}"
+{% endfor %}
+{% endif %}
+{% if ct_loki_ct_volumes_all | length > 0 %}
+    volumes:
+{% for vol in ct_loki_ct_volumes_all %}
+      - "{{ vol }}"
+{% endfor %}
+{% endif %}
+{% if ct_loki_ct_ports | length > 0 %}
+    ports:
+{% for port in ct_loki_ct_ports %}
+      - "{{ port }}"
+{% endfor %}
+{% endif %}
+{% if ct_loki_networks | length > 0 %}
+    networks:
+{% for net in ct_loki_networks %}
+      - "{{ net }}"
+{% endfor %}
+{% endif %}
+{% if ct_loki_compose_extra_networks | length > 0 %}
+
+networks:
+{{ ct_loki_compose_extra_networks | to_nice_yaml(indent=2, sort_keys=False) | indent(2, first=True) }}
+{% endif %}

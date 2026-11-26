@@ -1,6 +1,6 @@
 namespace: almaops
 name: monitoring
-version: 1.0.23
+version: 1.1.0
 readme: README.md
 authors:
   - Valentin Gostev <val@le.lc>
@@ -11,11 +11,12 @@ license:
   - MIT
 tags:
   - monitoring
+  - logging
   - grafana
   - prometheus
   - loki
 dependencies:
-  almaops.common: '>=1.0.6'
+  almaops.common: '>=1.0.67'
   community.grafana: '>=1.4.0'
   prometheus.prometheus: '>=0.17.0'
   community.docker: '>=4.0.0'
